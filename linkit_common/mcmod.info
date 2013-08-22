@@ -1,0 +1,20 @@
+[
+{
+  "modid": "LinkIt",
+  "name": "LinkIt!",
+  "description": "Initial development of LinkIt! Mod",
+  "version": "0.0.1",
+  "url": "http://www.github.com/drblakl/LinkIt",
+  "updateUrl": "",
+  "authorList": [
+    "drblakl"
+  ],
+  "credits": "drblakl",
+  "logoFile": "textures/logo/logo.png",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
