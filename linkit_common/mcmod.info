@@ -10,7 +10,7 @@
     "drblakl"
   ],
   "credits": "drblakl",
-  "logoFile": "textures/logo/logo.png",
+  "logoFile": "/logo.png",
   "screenshots": [
   ],
   "parent":"",
