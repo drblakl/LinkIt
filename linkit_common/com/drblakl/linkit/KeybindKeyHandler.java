@@ -41,24 +41,24 @@ public class KeybindKeyHandler extends KeyHandler {
     }
 
     @Override
-    public void keyDown(EnumSet<TickType> types, KeyBinding kb,
-            boolean tickEnd, boolean isRepeat) {
+    public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
         World world = Minecraft.getMinecraft().theWorld;
-        
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
         
-        if(kb.equals(linkKey)){
-            player.openGui(null, 1, world, 0, 0, 0);
-            player.addChatMessage("TESTING");
+        if(player == null || tickEnd){
+            return;
         }
-        
-        keyPressed = true;
+       
+        if(Minecraft.getMinecraft().inGameHasFocus){
+            if(kb.equals(linkKey)){
+                player.addChatMessage("Linkit Key was pressed!");
+            }
+        }
     }
 
     @Override
     public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
-        // TODO Auto-generated method stub
-        keyPressed = false;
+
     }
 
     @Override
