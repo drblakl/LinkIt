@@ -9,12 +9,12 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
-    
     private static PlayerTickHandler playerTickHandler;
     public static KeybindKeyHandler keybindHandler;
     
     @Override
     public void registerRenderers() {
+        
         keybindHandler = new KeybindKeyHandler();
         KeyBindingRegistry.registerKeyBinding(keybindHandler);
     }
