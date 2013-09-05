@@ -56,11 +56,6 @@ public class LinkIt {
         /*
          * Init is when turning on
          */   
-        TickRegistry.registerTickHandler(new PlayerTickHandler(EnumSet.of(TickType.PLAYER)), Side.SERVER);        
-        
-        if(KeyBindHandler.keyPressed){
-            
-        }
     }
     
     @PostInit
