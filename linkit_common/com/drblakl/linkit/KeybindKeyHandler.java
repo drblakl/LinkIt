@@ -6,6 +6,8 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.src.ModLoader;
 import net.minecraft.world.World;
@@ -49,9 +51,15 @@ public class KeybindKeyHandler extends KeyHandler {
             return;
         }
        
-        if(Minecraft.getMinecraft().inGameHasFocus){
-            if(kb.equals(linkKey)){
-                player.addChatMessage("Linkit Key was pressed!");
+        if(player.openContainer.isPlayerNotUsingContainer(player)){
+            if(ModLoader.isGUIOpen(GuiInventory.class)){
+                if(kb.equals(linkKey)){
+                    /*
+                     * Make the magic happen here ;)
+                     */
+                    player.addChatMessage("Inventory open!");
+                    player.addChatMessage("Linkit Key was pressed!");
+                }
             }
         }
     }
