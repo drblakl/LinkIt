@@ -16,6 +16,7 @@ import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.src.BaseMod;
@@ -33,6 +34,8 @@ public class KeybindKeyHandler extends KeyHandler {
     public static KeyBinding[] keybindArray = new KeyBinding[]{linkKey};
     public static boolean[] repeats = new boolean[keybindArray.length];  
     
+    IInventory inventory;
+    Container inventorySlots;        
     Slot theSlot;
        
     public KeybindKeyHandler(KeyBinding[] keyBindings, boolean[] repeatings) {
@@ -54,34 +57,40 @@ public class KeybindKeyHandler extends KeyHandler {
         // TODO Auto-generated method stub
         return "linkitKeybinds";
     }
-
+    
     @Override
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
         World world = Minecraft.getMinecraft().theWorld;
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-        
-        
-        
+               
         if(player == null || tickEnd){
             return;
         }
-       
+        
         if(player.openContainer.isPlayerNotUsingContainer(player)){
             if(ModLoader.isGUIOpen(GuiInventory.class)){
                 if(kb.equals(linkKey)){
-                   
-                    
-                    
                     player.addChatMessage(Minecraft.getMinecraft().currentScreen.toString()); 
                     
+         
                     
-                    for (int j1 = 0; j1 < this.inventorySlots.inventorySlots.size(); ++j1)
+                    
+                    for (int j1 = 0; j1 < player.inventory.getSizeInventory(); ++j1)
                     {
-                        Slot slot = (Slot)this.inventorySlots.inventorySlots.get(j1);
-                        this.drawSlotInventory(slot);
-
-                        Container test = player.inventoryContainer;
+                        ItemStack item = player.inventory.getStackInSlot(j1);
+                        Slot slot = (Slot)player.inventoryContainer.getSlot(j1);
                         
+                        if(item != null && slot != null){
+                            
+                            player.addChatMessage("" + Mouse.getX());
+                            player.addChatMessage("" + Mouse.getY());
+                            player.addChatMessage("" + slot.xDisplayPosition);
+                            player.addChatMessage("" + slot.yDisplayPosition);
+                            
+                            player.addChatMessage(slot.getSlotIndex() + "->" + item.getItemName());
+                        }
+                        
+                        /*
                         if (this.isMouseOverSlot(slot, Mouse.getX(), Mouse.getY()))
                         {
                             this.theSlot = slot;
@@ -93,9 +102,8 @@ public class KeybindKeyHandler extends KeyHandler {
                             GL11.glEnable(GL11.GL_LIGHTING);
                             GL11.glEnable(GL11.GL_DEPTH_TEST);
                         }
-                    }                    
-                    
-                    
+                        */
+                    }
                     
                     if (player.inventory.getItemStack() == null && theSlot != null && this.theSlot.getHasStack())
                     {
