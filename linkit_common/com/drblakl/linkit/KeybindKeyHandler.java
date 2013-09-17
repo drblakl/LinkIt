@@ -99,24 +99,6 @@ public class KeybindKeyHandler extends KeyHandler {
                     for (int j1 = 0; j1 < player.inventoryContainer.inventorySlots.size(); ++j1)
                     {
                         Slot slot = (Slot)player.inventoryContainer.inventorySlots.get(j1);
-                        
-                        if(getSlotAtPosition(mc, Mouse.getX(), Mouse.getY()) != null){
-                            player.addChatMessage("here");
-                        }
-                        
-                        /*
-                        if (this.isMouseOverSlot(slot, par1, par2))
-                        {
-                            this.theSlot = slot;
-                            GL11.glDisable(GL11.GL_LIGHTING);
-                            GL11.glDisable(GL11.GL_DEPTH_TEST);
-                            int k1 = slot.xDisplayPosition;
-                            int i1 = slot.yDisplayPosition;
-                            //this.drawGradientRect(k1, i1, k1 + 16, i1 + 16, -2130706433, -2130706433);
-                            GL11.glEnable(GL11.GL_LIGHTING);
-                            GL11.glEnable(GL11.GL_DEPTH_TEST);
-                        }
-                        */
                     }
                 }
             }
