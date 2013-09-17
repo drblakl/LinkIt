@@ -1,15 +1,18 @@
 package com.drblakl.linkit;
 
+import java.awt.Color;
 import java.util.EnumSet;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.block.BlockChest;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -22,8 +25,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.src.BaseMod;
 import net.minecraft.src.ModLoader;
 import net.minecraft.util.MouseHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
+import cpw.mods.fml.common.Mod.Block;
 import cpw.mods.fml.common.TickType;
 
 public class KeybindKeyHandler extends KeyHandler {
@@ -35,8 +40,25 @@ public class KeybindKeyHandler extends KeyHandler {
     public static boolean[] repeats = new boolean[keybindArray.length];  
     
     IInventory inventory;
-    Container inventorySlots;        
-    Slot theSlot;
+    Container inventorySlots;
+    
+    /** The X size of the inventory window in pixels. */
+    protected int xSize = 176;
+
+    /** The Y size of the inventory window in pixels. */
+    protected int ySize = 166;    
+    
+    /**
+     * Starting X position for the Gui. Inconsistent use for Gui backgrounds.
+     */
+    protected int guiLeft;
+
+    /**
+     * Starting Y position for the Gui. Inconsistent use for Gui backgrounds.
+     */
+    protected int guiTop;
+    private Slot theSlot;
+    private boolean isOver;    
        
     public KeybindKeyHandler(KeyBinding[] keyBindings, boolean[] repeatings) {
         super(keyBindings, repeatings);
@@ -62,65 +84,85 @@ public class KeybindKeyHandler extends KeyHandler {
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
         World world = Minecraft.getMinecraft().theWorld;
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-               
+        Minecraft mc = Minecraft.getMinecraft();
+        
         if(player == null || tickEnd){
             return;
         }
         
-        if(player.openContainer.isPlayerNotUsingContainer(player)){
+        if(player.inventory.isUseableByPlayer(player)){
             if(ModLoader.isGUIOpen(GuiInventory.class)){
                 if(kb.equals(linkKey)){
-                    player.addChatMessage(Minecraft.getMinecraft().currentScreen.toString()); 
                     
-         
+                    player.addChatMessage("here");
                     
-                    
-                    for (int j1 = 0; j1 < player.inventory.getSizeInventory(); ++j1)
+                    for (int j1 = 0; j1 < player.inventoryContainer.inventorySlots.size(); ++j1)
                     {
-                        ItemStack item = player.inventory.getStackInSlot(j1);
-                        Slot slot = (Slot)player.inventoryContainer.getSlot(j1);
+                        Slot slot = (Slot)player.inventoryContainer.inventorySlots.get(j1);
                         
-                        if(item != null && slot != null){
-                            
-                            player.addChatMessage("" + Mouse.getX());
-                            player.addChatMessage("" + Mouse.getY());
-                            player.addChatMessage("" + slot.xDisplayPosition);
-                            player.addChatMessage("" + slot.yDisplayPosition);
-                            
-                            player.addChatMessage(slot.getSlotIndex() + "->" + item.getItemName());
+                        if(getSlotAtPosition(mc, Mouse.getX(), Mouse.getY()) != null){
+                            player.addChatMessage("here");
                         }
                         
                         /*
-                        if (this.isMouseOverSlot(slot, Mouse.getX(), Mouse.getY()))
+                        if (this.isMouseOverSlot(slot, par1, par2))
                         {
                             this.theSlot = slot;
                             GL11.glDisable(GL11.GL_LIGHTING);
                             GL11.glDisable(GL11.GL_DEPTH_TEST);
                             int k1 = slot.xDisplayPosition;
-                            i1 = slot.yDisplayPosition;
-                            this.drawGradientRect(k1, i1, k1 + 16, i1 + 16, -2130706433, -2130706433);
+                            int i1 = slot.yDisplayPosition;
+                            //this.drawGradientRect(k1, i1, k1 + 16, i1 + 16, -2130706433, -2130706433);
                             GL11.glEnable(GL11.GL_LIGHTING);
                             GL11.glEnable(GL11.GL_DEPTH_TEST);
                         }
                         */
                     }
-                    
-                    if (player.inventory.getItemStack() == null && theSlot != null && this.theSlot.getHasStack())
-                    {
-                        ItemStack itemstack1 = this.theSlot.getStack();
-                        //this.drawItemStackTooltip(itemstack1, par1, par2);
-                        
-                        player.addChatMessage("" + itemstack1.itemID);
-                        
-                    }                    /*
-                     * Make the magic happen here ;)
-                     */
-                    player.addChatMessage("Inventory open!");
-                    player.addChatMessage("Linkit Key was pressed!");
                 }
             }
+            
+
         }
+    }    
+    
+    /**
+     * Returns the slot at the given coordinates or null if there is none.
+     */
+    private Slot getSlotAtPosition(Minecraft mc, int par1, int par2)
+    {
+        for (int k = 0; k < mc.thePlayer.inventoryContainer.inventorySlots.size(); ++k)
+        {
+            Slot slot = (Slot)mc.thePlayer.inventoryContainer.inventorySlots.get(k);
+
+            if (this.isMouseOverSlot(slot, par1, par2))
+            {
+                return slot;
+            }
+        }
+
+        return null;
     }
+    
+    /**
+     * Returns if the passed mouse position is over the specified slot.
+     */
+    private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3)
+    {
+        return this.isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+    }
+
+    /**
+     * Args: left, top, width, height, pointX, pointY. Note: left, top are local to Gui, pointX, pointY are local to
+     * screen
+     */
+    protected boolean isPointInRegion(int par1, int par2, int par3, int par4, int par5, int par6)
+    {
+        int k1 = this.guiLeft;
+        int l1 = this.guiTop;
+        par5 -= k1;
+        par6 -= l1;
+        return par5 >= par1 - 1 && par5 < par1 + par3 + 1 && par6 >= par2 - 1 && par6 < par2 + par4 + 1;
+    }    
 
     @Override
     public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
