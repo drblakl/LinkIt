@@ -1,6 +1,7 @@
 package com.drblakl.linkit;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.EnumSet;
 
 import org.lwjgl.input.Keyboard;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -90,6 +92,11 @@ public class KeybindKeyHandler extends KeyHandler {
             return;
         }
         
+        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+        int w = scaledresolution.getScaledWidth();
+        int h = scaledresolution.getScaledHeight();
+        Point test = new Point((Mouse.getX() * w) / mc.displayWidth, h - (Mouse.getY() * h) / mc.displayHeight - 1);
+        
         if(player.inventory.isUseableByPlayer(player)){
             if(ModLoader.isGUIOpen(GuiInventory.class)){
                 if(kb.equals(linkKey)){
@@ -102,10 +109,9 @@ public class KeybindKeyHandler extends KeyHandler {
                     }
                 }
             }
-            
 
         }
-    }    
+    }     
     
     /**
      * Returns the slot at the given coordinates or null if there is none.
