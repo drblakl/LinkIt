@@ -7,7 +7,6 @@ import java.util.EnumSet;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.BlockChest;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -40,6 +39,8 @@ public class KeybindKeyHandler extends KeyHandler {
     
     public static KeyBinding[] keybindArray = new KeyBinding[]{linkKey};
     public static boolean[] repeats = new boolean[keybindArray.length];  
+    
+    public GuiContainer window;
     
     IInventory inventory;
     Container inventorySlots;
@@ -91,17 +92,13 @@ public class KeybindKeyHandler extends KeyHandler {
         if(player == null || tickEnd){
             return;
         }
-        
-        ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
-        int w = scaledresolution.getScaledWidth();
-        int h = scaledresolution.getScaledHeight();
-        Point test = new Point((Mouse.getX() * w) / mc.displayWidth, h - (Mouse.getY() * h) / mc.displayHeight - 1);
-        
+               
         if(player.inventory.isUseableByPlayer(player)){
             if(ModLoader.isGUIOpen(GuiInventory.class)){
                 if(kb.equals(linkKey)){
+                         
+                        
                     
-                    player.addChatMessage("here");
                     
                     for (int j1 = 0; j1 < player.inventoryContainer.inventorySlots.size(); ++j1)
                     {
@@ -111,7 +108,7 @@ public class KeybindKeyHandler extends KeyHandler {
             }
 
         }
-    }     
+    }         
     
     /**
      * Returns the slot at the given coordinates or null if there is none.
