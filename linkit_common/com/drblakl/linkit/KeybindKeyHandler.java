@@ -96,10 +96,6 @@ public class KeybindKeyHandler extends KeyHandler {
         if(player.inventory.isUseableByPlayer(player)){
             if(ModLoader.isGUIOpen(GuiInventory.class)){
                 if(kb.equals(linkKey)){
-                         
-                        
-                    
-                    
                     for (int j1 = 0; j1 < player.inventoryContainer.inventorySlots.size(); ++j1)
                     {
                         Slot slot = (Slot)player.inventoryContainer.inventorySlots.get(j1);
@@ -118,9 +114,10 @@ public class KeybindKeyHandler extends KeyHandler {
         for (int k = 0; k < mc.thePlayer.inventoryContainer.inventorySlots.size(); ++k)
         {
             Slot slot = (Slot)mc.thePlayer.inventoryContainer.inventorySlots.get(k);
-
+            
             if (this.isMouseOverSlot(slot, par1, par2))
             {
+                
                 return slot;
             }
         }
