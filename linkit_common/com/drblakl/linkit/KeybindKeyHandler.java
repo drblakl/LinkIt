@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.BlockChest;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -28,6 +29,7 @@ import net.minecraft.src.ModLoader;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.Mod.Block;
 import cpw.mods.fml.common.TickType;
@@ -92,13 +94,24 @@ public class KeybindKeyHandler extends KeyHandler {
         if(player == null || tickEnd){
             return;
         }
-               
+          
+        
+        //public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {}        
+        
         if(player.inventory.isUseableByPlayer(player)){
             if(ModLoader.isGUIOpen(GuiInventory.class)){
                 if(kb.equals(linkKey)){
-                    for (int j1 = 0; j1 < player.inventoryContainer.inventorySlots.size(); ++j1)
+                    
+                    
+                    
+                    for (int j1 = 0; j1 < mc.thePlayer.inventory.mainInventory.length; ++j1)
                     {
                         Slot slot = (Slot)player.inventoryContainer.inventorySlots.get(j1);
+                     
+                        
+                        if(slot.getHasStack()){
+                            player.addChatMessage("X: " + Mouse.getX() + "Y: " + Mouse.getY() + " SX: " + slot.xDisplayPosition + "  SY: " + slot.yDisplayPosition);
+                        }
                     }
                 }
             }
